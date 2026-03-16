@@ -52,10 +52,10 @@ def clear_data():
     # Удаляем слишком старых моллюсков
     df = df[df['rings'] <= 22]
 
-    # Отбор признаков
-    df = df[['height', 'shell weight', 'sex', 'rings']]
+    # Добавляем новый признак
+    df['volume'] = df['length'] * df['height'] * df['diameter']
 
-    # Weight признаки к более линейному виду
+    # Weight признак к более линейному виду
     df['shell weight'] = np.sqrt(df['shell weight'])
 
     sex_dummies = pd.get_dummies(df['sex'], dtype=int, drop_first=True)
@@ -69,7 +69,7 @@ def clear_data():
 dag_abalones = DAG(
     dag_id="train_pipe",
     start_date=datetime(2026, 3, 15),
-    schedule=timedelta(minutes=5),
+    schedule=timedelta(minutes=30),
     max_active_runs=1,
     catchup=False
 )
